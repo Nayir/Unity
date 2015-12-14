@@ -62,3 +62,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+# My custom ignore
+Games
