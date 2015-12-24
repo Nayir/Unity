@@ -8,14 +8,21 @@ public class TextController : MonoBehaviour {
 	public Text answerA;
 	public Text answerB;
 	public Text answerC;
-	public GameObject choices; // Assign in inspector
+ 	public GameObject choices; // Assign in inspector
 	private bool isShowingAnswer;
 	public GameObject ContinuerButton; // Assign in inspector
 	private bool isShowingContinu;
 	public GameObject ReturnButton; // Assign in inspector
 	private bool isShowingReturn;
-	
+
+	//PICTURES
+	public GameObject Plans; // Assign in inspector
+	public GameObject MainHouse;
+	public GameObject Tv;
+	public GameObject Garden;
+
 	enum States {
+		initial,
 		tv_0,
 		tv_1,
 		tv_2,
@@ -108,8 +115,18 @@ public class TextController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		TvScene0();
-		
-		if (Application.loadedLevelName == "garden") {
+		if (Application.loadedLevelName == "Game") {
+			myState = States.initial;
+			isShowingAnswer = false;
+			choices.SetActive(isShowingAnswer);
+			
+			isShowingContinu = true;
+			ContinuerButton.SetActive(isShowingContinu);
+			
+			ReturnButton.SetActive(false);
+		}
+
+		else if (Application.loadedLevelName == "garden") {
 			myState = States.garden_0;
 			isShowingAnswer = false;
 			choices.SetActive(isShowingAnswer);
@@ -119,8 +136,9 @@ public class TextController : MonoBehaviour {
 			
 			ReturnButton.SetActive(false);
 		}
-		else if (Application.loadedLevelName == "Game"){
-			myState = States.tv_0;
+
+		else if (Application.loadedLevelName == "jungle"){
+			myState = States.jungle_0;
 			
 			isShowingAnswer = false;
 			choices.SetActive(isShowingAnswer);
@@ -135,37 +153,65 @@ public class TextController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		TvScene0();
-		stepUpdate();
 		print (Application.loadedLevelName);
+	}
+
+	public void NoPlansLevel1() {
+		MainHouse.SetActive (false);
+		Tv.SetActive (false);
+		Garden.SetActive (false);
 	}
 
 	public void ModeContinu(){
 		choices.SetActive (false);
 		ContinuerButton.SetActive (true);
+		ReturnButton.SetActive(true);
 	}
 
 	public void ModeAnswer(){
 		choices.SetActive (true);
 		ContinuerButton.SetActive (false);
+		ReturnButton.SetActive(false);
+	}
+
+	public void ModeReturn(){
+		ReturnButton.SetActive(true);
+		choices.SetActive(false);
+		ContinuerButton.SetActive (false);
 	}
 	
 	public void TvScene0(){
-		if (myState  == States.tv_0) {
+		NoPlansLevel1();
+		if (myState  == States.initial) {
+			ModeContinu();
+			story.text = "Il était un fois, une personne ordinaire dans une maison ordinaire...";
+			MainHouse.SetActive(true);
+			
+		}
+
+		else if (myState  == States.tv_0) {
+			ModeContinu();
 			story.text = "Télévision : FLASH INFO SPECIAL. Des archéologues ont découvert l’existence d’un grand trésor caché" +
 				" dans la pyramide du Pharaon ToutenKarton. Les plus grands aventuriers du monde partent déjà à sa" +
 					" recherche, qui pourra bien découvrir ce trésor en premier ? …\n\n";
-			print (myState);
+			MainHouse.SetActive(true);
+
 		}
 		
 		else if (myState  == States.tv_1) {
+			ModeContinu();
 			story.text = " Le Héros : Qu’est ce que j’aimerais trouver ce trésor ! J’ai envie d’une autre vie, pleine d’aventure\n\n";
+			MainHouse.SetActive(true);
+			Tv.SetActive(true);
 		}
 		
 		else if (myState  == States.tv_2) {
+			ModeContinu();
 			story.text = " Mais sans Carte au Trésor je n’y arriverais jamais. Et puis je n’ai pas du tout le sens de l’orientation !\n\n";
 		}
 		
 		else if (myState  == States.tv_3) {
+			ModeAnswer();
 			story.text = "Comment je pourrais me débrouiller ?";
 			answerA.text = "Chercher la carte sur internet";
 			answerB.text = "Aller dans le jardin";
@@ -173,44 +219,54 @@ public class TextController : MonoBehaviour {
 		}
 		
 		else if (myState  == States.tv_internet) {
+			ModeReturn();
 			story.text = "Il n'y a rien sur internet à propos de cette carte au trésor...";
 		}
 		
 		else if (myState  == States.garden_0) {
+			ModeContinu();
 			story.text = "Héros : Rien de tel qu’un peu d’air frais pour s’aérer les idées. Il faut que je réfléchisse à une solution pour retrouver ce fameux trésor avant les autres.";
 		}
 		
 		else if (myState  == States.tv_playstation) {
+			ModeReturn();
 			story.text = "Non ce n'est pas le moment de jouer, je dois partir à l'aventure !";
 		}
 		
 		// GARDEN SECTION 
 		
 		else if (myState  == States.garden_0) {
+			ModeContinu();
 			story.text = "Héros : Rien de tel qu’un peu d’air frais pour s’aérer les idées. Il faut que je réfléchisse à une solution pour retrouver ce fameux trésor avant les autres.";
 		}
 		
 		else if (myState  == States.garden_1) {
+			ModeContinu();
 			story.text = "PAAAAAAAF";
 		}
 		
 		else if (myState  == States.garden_2) {
+			ModeContinu();
 			story.text = "Héros : Waaaaah. J’en suis tombé à la renverse. C’était quoi ce bazar à l’instant ?";
 		}
 		
 		else if (myState  == States.garden_3) {
+			ModeContinu();
 			story.text = "Une voix : T’es un peu trouillard pour un aventurier ! Si de la simple fumée de te fait peur, tu ne pourras jamais retrouver le trésor de ToutenKarton !";
 		}
 		
 		else if (myState  == States.garden_4) {
+			ModeContinu();
 			story.text = "Héros : Hé mais, comment tu sais pour le trésor ?";
 		}
 		
 		else if (myState  == States.garden_5) {
+			ModeContinu();
 			story.text = "";
 		}
 		
 		else if (myState  == States.garden_6) {
+			ModeAnswer();
 			story.text = "Héros : Ouais…. Mais du coup j’aurais quelques question à te poser:";
 			answerA.text = "Qui es-tu ?";
 			answerB.text = "Que fais-tu ici ?";
@@ -218,10 +274,12 @@ public class TextController : MonoBehaviour {
 		}
 		
 		else if (myState  == States.garden_who) {
+			ModeReturn();
 			story.text = "Je te l'ai dit à l'instant, je suis le Seigneur de la Magie.";
 		}
 		
 		else if (myState  == States.garden_7) {
+			ModeAnswer();
 			story.text = "Seigneur de la Magie : Je suis ici car tu es l'enfant de le prophétie et tu dois absolument trouver le trésor avant tous les autres aventuriers." +
 				"Ah ouais ? Mais c'est trop cool ça ! Et sinon...";
 			answerA.text = "Tu as quel age ?";
@@ -230,47 +288,109 @@ public class TextController : MonoBehaviour {
 		}
 		
 		else if (myState  == States.garden_how) {
+			ModeReturn();
 			story.text = "Avec mes puissants pouvoirs magiques, et un peu de talc";
 		}
 		
 		else if (myState  == States.garden_old) {
+			ModeReturn();
 			story.text = "J'ai 1999 ans, mais tu peux arrondir à 2000 ans.";
 		}
 		
 		else if (myState  == States.garden_hat) {
+			ModeReturn();
 			story.text = "Un simple mortel comme toi ne peut pas porter un chapeau de puissant magicien comme le mien.";
 		}
 		
 		else if (myState  == States.garden_8) {
+			ModeContinu();
 			story.text = "Merci ! C'est parti pour l'Egypte ! Je prends le premier vol.";
 		}
 
-		// GARDEN SECTION 
+		// JUNGLE SECTION 
 
-		else if (myState  == States.garden_8) {
-			story.text = "Merci ! C'est parti pour l'Egypte ! Je prends le premier vol.";
+		else if (myState  == States.jungle_0) {
+			ModeContinu();
+			story.text = "Héros : Après un vol direct pour l’Egypte, et plusieurs jours de route à dos de dromadaire dans le désert, je dois me repérer dans la jungle et le désert grâce à ma carte.";
 		}
-	}
-	
-	public void stepUpdate() {
-		print (myState);
-		if (myState == States.tv_3) {
+
+		else if (myState  == States.jungle_1) {
+			ModeContinu();
+			story.text = "Héros : Voyons voir cette carte";
+		}
+
+		else if (myState  == States.jungle_2) {
 			ModeAnswer();
-		} else if (myState == States.garden_7) {
-			myState = States.garden_7;
-		} else if (myState == States.garden_7) {
-			myState = States.garden_7;
-		} else if (myState == States.garden_8) {
-			ModeContinu();		
+			story.text = "Me voici devant la PREMIERE INTERSECTION.Quel chemin je dois prendre ?\n\n";
+			answerA.text = "Voie de gauche";
+			answerB.text = "Voie du milieu";
+			answerC.text = "Voie de droite";
 		}
+
+		else if (myState  == States.jungle_left_1) {
+			ModeReturn();
+			story.text = "Il y a pleins de crocodiles par là, je ne peux pas passer.";
+		}
+
+		else if (myState  == States.jungle_right_1) {
+			ModeReturn();
+			story.text = "De nombreuses pierres bloquent le passage, je ferais mieux de rebrousser chemin";
+		}
+
+		else if (myState  == States.jungle_center_1) {
+			ModeAnswer();
+			story.text = "Me voici devant la 2EME INTERSECTION."+
+				"Quel chemin je dois prendre ?\n\n";
+			answerA.text = "Voie de gauche";
+			answerB.text = "Voie du milieu";
+			answerC.text = "Voie de droite";
+		}
+
+		else if (myState  == States.jungle_left_2) {
+			ModeReturn();
+			story.text = "Il y a pleins d'arraignées par là, je ne peux pas passer.";
+		}
+		
+		else if (myState  == States.jungle_center_2) {
+			ModeReturn();
+			story.text = "Il y a une grande rivière qui bloque le passage";
+		}
+
+		else if (myState  == States.jungle_right_2) {
+			ModeAnswer();
+			story.text = "JMe voici devant la 3EME INTERSECTION.\n\n "+
+				"Quel chemin je dois prendre ?\n\n";
+			answerA.text = "Voie de gauche";
+			answerB.text = "Voie du milieu";
+			answerC.text = "Voie de droite";
+		}
+
+		else if (myState  == States.jungle_right_3) {
+			ModeReturn();
+			story.text = "Il y a trop de lianes et d'herbes hautes par là, je ne peux pas passer.";
+		}
+		
+		else if (myState  == States.jungle_center_3) {
+			ModeReturn();
+			story.text = "Il y a un grand rocher qui bloque le passage";
+		}
+
+		else if (myState  == States.jungle_left_3) {
+			ModeContinu();
+			story.text = "Héros : Cool ! Me voilà sorti de ce labyrinthe mais la carte s’arrête ici et toujours pas de trace de la Pyramide de ToutanKarton.\n\n"+
+						 " Par contre, j’aperçois un temple Ninja, je pourrais peut être leur demander mon chemin.";
+		}
+
 	}
 	
 	public void Continuer(){
-		if (myState  == States.tv_0) {
+		if (myState == States.initial) {
+			myState = States.tv_0;
+		} else if (myState == States.tv_0) {
 			myState = States.tv_1;
-		} else if (myState == States.tv_1)  {
+		} else if (myState == States.tv_1) {
 			myState = States.tv_2;
-		} else if (myState == States.tv_2)  {
+		} else if (myState == States.tv_2) {
 			myState = States.tv_3;
 		} else if (myState == States.garden_0) {
 			myState = States.garden_1;
@@ -284,89 +404,113 @@ public class TextController : MonoBehaviour {
 			myState = States.garden_5;
 		} else if (myState == States.garden_5) {
 			myState = States.garden_6;
-			choices.SetActive (true);
-			ContinuerButton.SetActive (false);
+		} else if (myState == States.jungle_0) {
+			myState = States.jungle_1;
+		} else if (myState == States.jungle_1) {
+			myState = States.jungle_2;
 		}
 	}
-	
+
 	public void Return(){
-		ReturnButton.SetActive(false);
+		ModeAnswer();
 		if (myState == States.tv_internet) {
 			myState = States.tv_3;
 		} else if (myState == States.tv_playstation) {
 			myState = States.tv_3;
 		} else if (myState == States.garden_who) {
 			myState = States.garden_6;
-			choices.SetActive (true);
-			ContinuerButton.SetActive (false);
 		} else if (myState == States.garden_how) {
 			myState = States.garden_6;
-			choices.SetActive (true);
-			ContinuerButton.SetActive (false);
 		} else if (myState == States.garden_hat) {
 			myState = States.garden_7;
-			choices.SetActive (true);
-			ContinuerButton.SetActive (false);
-		}
-		
-		else if (myState == States.garden_old) {
+		} else if (myState == States.garden_old) {
 			myState = States.garden_7;
-			choices.SetActive (true);
-			ContinuerButton.SetActive (false);
+		} else if (myState == States.jungle_left_1) {
+			myState = States.jungle_2;
+		} else if (myState == States.jungle_right_1) {
+			myState = States.jungle_2;
+		} else if (myState == States.jungle_left_2) {
+			myState = States.jungle_center_1;
+		} else if (myState == States.jungle_center_2) {
+			myState = States.jungle_center_1;
+		} else if (myState == States.jungle_center_3) {
+			myState = States.jungle_right_2;
+		} else if (myState == States.jungle_right_3) {
+			myState = States.jungle_right_2;
 		}
 	}
-	
-	
+
 	public void Answer(string answer){
 		print (answer);
-		
 		if (myState  == States.tv_3) {
 			if (answer == "a"){
 				myState = States.tv_internet;
-				ReturnButton.SetActive(true);
-				choices.SetActive(false);
-			}
-			else if (answer == "b"){
+				ModeReturn();
+			} else if (answer == "b"){
 				myState = States.garden_0;
-				choices.SetActive(false);
 				Application.LoadLevel("garden");
-				
-			}
-			else if (answer == "c"){
+			} else if (answer == "c"){
 				myState = States.tv_playstation;
-				ReturnButton.SetActive(true);
-				choices.SetActive(false);
+				ModeReturn();
 			}
+
 		} else if (myState  == States.garden_7) {
 			if (answer == "a"){
 				myState = States.garden_old;
-				ReturnButton.SetActive(true);
-				choices.SetActive(false);
+				ModeReturn();
 			} else if (answer == "b"){
 				myState = States.garden_hat;
-				ReturnButton.SetActive(true);
-				choices.SetActive(false);
+				ModeReturn();
 			} else if (answer == "c"){
 				myState = States.garden_8;
-				print ("question 2b");
+				ModeAnswer();
+				Application.LoadLevel("jungle");
 			}
 			
 		} else if (myState  == States.garden_6) {
 			if (answer == "a"){
 				myState = States.garden_who;
-				ReturnButton.SetActive(true);
-				choices.SetActive(false);
+				ModeReturn();
 			} else if (answer == "b"){
 				myState = States.garden_7;
-				print ("question 1b");	
+				ModeAnswer();
 			} else if (answer == "c"){
 				myState = States.garden_how;
-				ReturnButton.SetActive(true);
-				choices.SetActive(false);
+				ModeReturn();
+			}
+		}  else if (myState  == States.jungle_2) {
+			if (answer == "a"){
+				myState = States.jungle_left_1;
+				ModeReturn();
+			} else if (answer == "b"){
+				myState = States.jungle_center_1;
+				ModeAnswer();
+			} else if (answer == "c"){
+				myState = States.jungle_right_1;
+				ModeReturn();
+			}
+		} else if (myState  == States.jungle_center_1) {
+			if (answer == "a"){
+				myState = States.jungle_left_2;
+				ModeReturn();
+			} else if (answer == "b"){
+				myState = States.jungle_center_2;
+				ModeReturn();
+			} else if (answer == "c"){
+				myState = States.jungle_right_2;
+				ModeAnswer();
+			}
+		} else if (myState  == States.jungle_right_2) {
+			if (answer == "a"){
+				myState = States.jungle_left_3;
+				ModeAnswer();
+			} else if (answer == "b"){
+				myState = States.jungle_center_3;
+				ModeReturn();
+			} else if (answer == "c"){
+				myState = States.jungle_right_3;
+				ModeReturn();
 			}
 		}
-		
-		
 	}
-	
 }
